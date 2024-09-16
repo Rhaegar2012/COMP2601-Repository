@@ -5,6 +5,8 @@ import java.util.ArrayList;
 import java.util.Scanner;
 /**
  * Main driver class with data reading functionality 
+ * author: Jose Tellez
+ * Version:0.0 
  * */
 public class Driver {
 	
