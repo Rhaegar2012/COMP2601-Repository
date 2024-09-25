@@ -6,8 +6,16 @@
 public class AudioFile extends MusicMedia {
 	
 	private String fileName;
-	private int fileSize;
+	private int    fileSize;
 	
+	/**
+	 * Class constructor
+	 * @param musicTitle: media music title
+	 * @param artist: artist name
+	 * @param fileName: file name 
+	 * @param fileSize  file size in mb
+	 * @throws IllegalArgumentException parameters fail string check
+	 * */
 	public AudioFile(final String musicTitle,final String artist, final String fileName, final int fileSize) {
 		super(musicTitle, artist);
 		// TODO Auto-generated constructor stub
@@ -17,20 +25,44 @@ public class AudioFile extends MusicMedia {
 		if(!isValidInteger(fileSize)) {
 			throw new IllegalArgumentException(); 
 		}
+		this.fileName = fileName;
+		this.fileSize = fileSize;
 		
 	}
+	
+	/**
+	 * Returns media file name
+	 * */
+	
 	public String getFileName() {
 		return fileName;
 	}
+	
+	
+	/**
+	 * Sets new file name
+	 * @param fileName: new file name
+	 * @throws IllegalArgumentException if fileName fails string check
+	 * */
 	public void setFileName(String fileName) {
 		if(!isValidString(fileName)) {
 			throw new IllegalArgumentException();
 		}
 		this.fileName = fileName;
 	}
+	
+	/**
+	 * Return files size
+	 * */
 	public int getFileSize() {
 		return fileSize;
 	}
+	
+	/**
+	 * Sets new file size
+	 * @param fileSize: new file size
+	 * @throws IllegalArgumentException if fileSize fails string checks
+	 * */
 	public void setFileSize(int fileSize) {
 		if(!isValidInteger(fileSize)) {
 			throw new IllegalArgumentException();
@@ -39,6 +71,9 @@ public class AudioFile extends MusicMedia {
 	}
 	
 	
+	/**
+	 * toString method , prints audio file information 
+	 **/
 	public String toString() {
 		super.toString();
 		System.out.println(String.format("File name: %s",this.fileName));
@@ -47,6 +82,9 @@ public class AudioFile extends MusicMedia {
 	}
 	
 	
+	/**
+	 * override of play method , plays Audio file message
+	 * */
 	public void play() {
 		System.out.println("Audio file is playing");
 		
