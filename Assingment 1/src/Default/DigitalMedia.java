@@ -1,3 +1,4 @@
+package Default;
 /**
  * This class models a digital media file 
  * Author: Jose Tellez
@@ -15,15 +16,20 @@ public abstract class DigitalMedia extends MusicMedia implements FileProcessor {
 		super();
 	}
 	
+	public DigitalMedia(final String sku, final String musicTitle, final String artist, final int year) 
+	{
+		super(sku,musicTitle,artist,year);
+	}
+	
 	/**
-	 * Constructo
+	 * Constructor
 	 * @param musicTitle: music title 
 	 * @param artist: 	 artist name 
 	 * @param filePath:  filePath
 	 * @throws IllegalArgument Exception if the file path is not valid 
 	 * */
-	public DigitalMedia(final String musicTitle,final String artist,final String filePath) {
-		super(musicTitle, artist);
+	public DigitalMedia(final String sku,final String musicTitle,final String artist,final String filePath,int year) {
+		super(sku,musicTitle, artist,year);
 		if(!isValidString(filePath)) 
 		{
 			throw new IllegalArgumentException();
@@ -66,3 +72,4 @@ public abstract class DigitalMedia extends MusicMedia implements FileProcessor {
 	
 
 }
+

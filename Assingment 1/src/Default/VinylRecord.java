@@ -1,3 +1,4 @@
+package Default;
 /**
  * This class models a Vinyl Record
  * Author: Jose Tellez
@@ -39,8 +40,17 @@ public class VinylRecord extends PhysicalMedia {
 		Map<String,Integer> acceptedWeightsDictionary = new HashMap<String,Integer>(){
 			{put(DEFAULT_SIZE_INCHES,DEFAULT_WEIGHT_GRAMS);
 			 put(MEDIUM_SIZE_INCHES,WEIGHT_MEDIUM_GRAMS);}};
-    }      
+    }
 	
+	/**
+	 * Default constructor
+	 * */
+	public VinylRecord() {
+		this.numberOfTracks= DEFAULT_NUMBER_OF_TRACKS;
+		this.weightInGrams = DEFAULT_WEIGHT_GRAMS;
+		this.sizeInInches  = DEFAULT_SIZE_INCHES;
+		
+	}
 	/**
      * Class constructor
      * @param musicTitle: music title
@@ -50,29 +60,24 @@ public class VinylRecord extends PhysicalMedia {
      * @throws IllegalArgumentException if weightInGrams fails acceptable weight value check
      * */
 	
-	public VinylRecord(String musicTitle,String artist) {
-		this();
-		if(!isValidString(musicTitle)||!isValidString(artist)) 
-		{
+	public VinylRecord(final String sku, final String musicTitle, final String artist, final int year , final int numberOfTracks) {
+		super(sku,musicTitle,artist,year);
+		if(!isValidInteger(numberOfTracks)) {
 			throw new IllegalArgumentException();
 		}
-		this.musicTitle=musicTitle;
-		this.artist =artist;
-		
+		this.numberOfTracks=numberOfTracks;
+	}
+	
+	public VinylRecord(final String sku, final String musicTitle , final String artist, final int year,final int numberOfTracks, final String sizeInInches, final int weight) {
+		super(sku,musicTitle,artist,year);
+		if(!isValidInteger(numberOfTracks) || !isAnAcceptableVinylSize(sizeInInches)||!isAnAcceptableVinylWeight(sizeInInches,weight)) {
+			throw new IllegalArgumentException();
+		}
+		this.sizeInInches	=sizeInInches;
+		this.numberOfTracks	=numberOfTracks;
+		this.sizeInInches 	= sizeInInches;
+	}
 
-	}
-	
-	public VinylRecord() {
-		this.numberOfTracks= DEFAULT_NUMBER_OF_TRACKS;
-		this.weightInGrams = DEFAULT_WEIGHT_GRAMS;
-		this.sizeInInches  = DEFAULT_SIZE_INCHES;
-		
-	}
-	
-	
-	
-	
-	
 	/**
 	 * Checks if record size is a valid value returns true if is , false otherwise
 	 * @param inputSize : record size in inches
@@ -93,8 +98,10 @@ public class VinylRecord extends PhysicalMedia {
 	 * @param weightInGrams: record weight in grams
 	 * */
 	private boolean isAnAcceptableVinylWeight(String sizeInInches,int weightInGrams) {
-		if(isAnAcceptableVinylSize(sizeInInches)) 
-		{
+		if(!isValidInteger(weightInGrams)||!isValidString(sizeInInches)) {
+			throw new IllegalArgumentException();
+		}
+		if(isAnAcceptableVinylSize(sizeInInches)){
 			if(sizeInInches != "12\"") 
 			{
 				int acceptedWeight = acceptedWeightsDictionary.get(sizeInInches);
@@ -182,3 +189,4 @@ public class VinylRecord extends PhysicalMedia {
 
 
 }
+

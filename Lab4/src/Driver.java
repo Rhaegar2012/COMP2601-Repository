@@ -6,10 +6,10 @@
 public class Driver {
 
 	public static void main(String[] args) {
-		// TODO Auto-generated method stub
-		MusicMedia audioFile 	= new AudioFile("learn to fly","foo fighters","learntofly.mp3",3,"C://My");
-		MusicMedia compactDisc  = new CompactDisc("Master of Puppets","Metallica",8);
-		MusicMedia vinyl        = new VinylRecord("Abbey Road","The Beatles");
+	
+		DigitalMedia audioFile 	= new AudioFile("A girl like you","foo fighters","a girl like you.mp3",3,"C://My");
+		PhysicalMedia compactDisc  = new CompactDisc("Master of Puppets","Metallica",8);
+		PhysicalMedia vinyl        = new VinylRecord("Abbey Road","The Beatles");
 		
 		audioFile.toString();
 		audioFile.play();

@@ -1,3 +1,4 @@
+package Default;
 /**
  * This class simulates a physical Media File
  * Author Jose Tellez
@@ -15,10 +16,11 @@ public abstract class PhysicalMedia extends MusicMedia {
 	/**
 	 * Class constructor 
 	 * @param musicTitle: music title
-	 * @param artis: artis
+	 * @param artis: artist name
 	 * */
-	public PhysicalMedia(String musicTitle, String artist) {
-		super(musicTitle,artist);
+	public PhysicalMedia(String sku, String musicTitle, String artist,int year) {
+		super(sku,musicTitle,artist,year);
+		
 	}
 
 }
