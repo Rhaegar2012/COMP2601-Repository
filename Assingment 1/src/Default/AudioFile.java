@@ -89,9 +89,9 @@ public class AudioFile extends DigitalMedia {
 	 * toString method , prints audio file information 
 	 **/
 	public String toString() {
-		super.toString();
-		System.out.println(String.format("File name: %s",this.fileName));
-		System.out.println(String.format("File size: %d",this.fileResolution));
+		String superString 			=super.toString();
+		String audioFileDescription =String.format("AudioFile[fileName=%s,fileResolution=%d]", fileName,fileResolution)+superString;
+		System.out.println(audioFileDescription);
 		return null;
 	}
 	

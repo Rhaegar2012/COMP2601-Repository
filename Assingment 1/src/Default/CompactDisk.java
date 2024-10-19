@@ -55,8 +55,9 @@ public class CompactDisk extends PhysicalMedia {
 	 * ToString extend 
 	 * */
     public String toString() {
-    	super.toString();
-    	System.out.println(String.format("Number of tracks %s",numberOfTracks));
+    	String superString		=super.toString();
+    	String compactDiskString= String.format("Number of tracks %s",numberOfTracks)+superString;
+    	System.out.println(compactDiskString);
     	return null;
     }
     
@@ -66,7 +67,7 @@ public class CompactDisk extends PhysicalMedia {
      */
      
 	public void play() {
-		
+
 		System.out.println("Compact Disc is playing");
 		
 	}

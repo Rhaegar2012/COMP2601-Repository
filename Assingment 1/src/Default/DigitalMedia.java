@@ -41,9 +41,9 @@ public abstract class DigitalMedia extends MusicMedia implements FileProcessor {
 	 * ToString extend 
 	 * */
     public String toString() {
-    	super.toString();
-    	System.out.println(String.format("Filepath:  %s",filePath));
-    	return null;
+    	String superString 			=super.toString();
+    	String digitalMediaString	=String.format("Digital Media[filepath:  %s",filePath)+superString;
+    	return digitalMediaString;
     }
     
     /**

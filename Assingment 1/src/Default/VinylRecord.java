@@ -15,37 +15,34 @@ public class VinylRecord extends PhysicalMedia {
 	private String 			sizeInInches;
 	//Default Constants
 	private final int 		DEFAULT_WEIGHT_GRAMS 		= 40;
-	private final String 	DEFAULT_SIZE_INCHES			= "7\"";
+	private final String 	DEFAULT_SIZE_INCHES			= "7";
 	private final int 		DEFAULT_NUMBER_OF_TRACKS	= 2;
 	//Instance constant 
 	private  Integer 			 WEIGHT_MINIMUM_GRAMS;
 	private  Integer 			 WEIGHT_MEDIUM_GRAMS;
-	private  Integer 			 WEIGHT_MEIDUM_GRAMS;
+	private  Integer 			 WEIGHT_MAXIMUM_GRAMS;
 	private  String  			 MEDIUM_SIZE_INCHES;
 	private  String  			 MAXIMUM_SIZE_INCHES;
 	private  Integer 			 TWELVE_INCH_LOWER_WEIGHT_LIMIT;
 	private  Integer 			 TWELVE_INCH_UPPER_WEIGHT_LIMIT;
-	private  ArrayList<String> 	 acceptedSizes;
-	private  Map<String,Integer> acceptedWeightsDictionary;
+	
 	//Constants initializer block
 	{
-		final Integer WEIGHT_MINIMUM_GRAMS	 		  = 140;
-	    final Integer WEIGHT_MEDIUM_GRAMS		 	  = 180;
-	    final Integer WEIGHT_MAXIMUM_GRAMS     		  = 200;
-	    final String  MEDIUM_SIZE_INCHES			  = "10\"";
-	    final String  MAXIMUM_SIZE_INCHES			  = "12\"";
-	    final Integer TWELVE_INCH_LOWER_WEIGHT_LIMIT  = 140;
-	    final Integer TWELVE_INCH_UPPER_WEIGHT_LIMIT  = 200; 
-	          ArrayList<String> acceptedSizes 		  = new ArrayList<String>(Arrays.asList(DEFAULT_SIZE_INCHES,MEDIUM_SIZE_INCHES,MAXIMUM_SIZE_INCHES));
-		Map<String,Integer> acceptedWeightsDictionary = new HashMap<String,Integer>(){
-			{put(DEFAULT_SIZE_INCHES,DEFAULT_WEIGHT_GRAMS);
-			 put(MEDIUM_SIZE_INCHES,WEIGHT_MEDIUM_GRAMS);}};
+		 WEIGHT_MINIMUM_GRAMS	 		  		= 40;
+	     WEIGHT_MEDIUM_GRAMS		 	  		= 100;
+	     WEIGHT_MAXIMUM_GRAMS     		  		= 200;
+	     MEDIUM_SIZE_INCHES			  			= "10";
+	     MAXIMUM_SIZE_INCHES			  		= "12";
+	     TWELVE_INCH_LOWER_WEIGHT_LIMIT  		= 140;
+	     TWELVE_INCH_UPPER_WEIGHT_LIMIT  		= 200; 
+	
     }
 	
 	/**
 	 * Default constructor
 	 * */
 	public VinylRecord() {
+	
 		this.numberOfTracks= DEFAULT_NUMBER_OF_TRACKS;
 		this.weightInGrams = DEFAULT_WEIGHT_GRAMS;
 		this.sizeInInches  = DEFAULT_SIZE_INCHES;
@@ -66,16 +63,18 @@ public class VinylRecord extends PhysicalMedia {
 			throw new IllegalArgumentException();
 		}
 		this.numberOfTracks=numberOfTracks;
+		
 	}
 	
 	public VinylRecord(final String sku, final String musicTitle , final String artist, final int year,final int numberOfTracks, final String sizeInInches, final int weight) {
 		super(sku,musicTitle,artist,year);
-		if(!isValidInteger(numberOfTracks) || !isAnAcceptableVinylSize(sizeInInches)||!isAnAcceptableVinylWeight(sizeInInches,weight)) {
+		if(!isValidInteger(numberOfTracks)||!isAnAcceptableVinylSize(sizeInInches)||!isAnAcceptableVinylWeight(sizeInInches,weight)) {
 			throw new IllegalArgumentException();
 		}
 		this.sizeInInches	=sizeInInches;
 		this.numberOfTracks	=numberOfTracks;
 		this.sizeInInches 	= sizeInInches;
+		
 	}
 
 	/**
@@ -84,13 +83,12 @@ public class VinylRecord extends PhysicalMedia {
 	 * */
 	private boolean isAnAcceptableVinylSize(String inputSize)
 	{
+		ArrayList<String> acceptedSizes = new ArrayList<String>(Arrays.asList(DEFAULT_SIZE_INCHES,MEDIUM_SIZE_INCHES,MAXIMUM_SIZE_INCHES));
 		if(acceptedSizes.contains(inputSize)) {
 			return true;
 		}
 		return false;
 	}
-	
-	
 	
 	/**
 	 * Checks if the provided weight of a record is a valid value , returns true if it is , false otherwise
@@ -98,11 +96,14 @@ public class VinylRecord extends PhysicalMedia {
 	 * @param weightInGrams: record weight in grams
 	 * */
 	private boolean isAnAcceptableVinylWeight(String sizeInInches,int weightInGrams) {
+		Map<String,Integer> acceptedWeightsDictionary = new HashMap<String,Integer>(){
+			{put(DEFAULT_SIZE_INCHES,DEFAULT_WEIGHT_GRAMS);
+			 put(MEDIUM_SIZE_INCHES,WEIGHT_MEDIUM_GRAMS);}};
 		if(!isValidInteger(weightInGrams)||!isValidString(sizeInInches)) {
 			throw new IllegalArgumentException();
 		}
 		if(isAnAcceptableVinylSize(sizeInInches)){
-			if(sizeInInches != "12\"") 
+			if(!sizeInInches.equals(MAXIMUM_SIZE_INCHES)) 
 			{
 				int acceptedWeight = acceptedWeightsDictionary.get(sizeInInches);
 				if(acceptedWeight==weightInGrams){
@@ -171,12 +172,12 @@ public class VinylRecord extends PhysicalMedia {
 	/**
 	 * toString extends toString method from parent class
 	 * */
+	@Override
 	public String toString() 
 	{
-		super.toString();
-		System.out.println(String.format("Record number of tracks: %d",this.numberOfTracks));
-		System.out.println(String.format("Record size in inches:   %s",this.sizeInInches));
-		System.out.println(String.format("Record weight in grams:  %d",this.weightInGrams));
+		String superString=super.toString();
+		String vinylRecordString=String.format("VinylRecord[numberOfTracks=%d sizeInInches=%s weightInGrams=%d]",numberOfTracks,sizeInInches,weightInGrams)+superString;
+		System.out.println(vinylRecordString);
 		return null;
 	}
 	

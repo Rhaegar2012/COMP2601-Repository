@@ -10,7 +10,7 @@ public abstract class MusicMedia {
 	private     String artist;
 	private     String sku;
 	private     String title;
-	private   int    year;
+	private   	int    year;
 	//Constants
 	public static final int CURRENT_YEAR =2024;
 	public static final int FIRST_YEAR   =1860;
@@ -154,10 +154,8 @@ public abstract class MusicMedia {
 	@Override
 	public String toString() 
 	{
-		System.out.println("Media info");
-		System.out.println(String.format("Music title: %s",title));
-		System.out.println(String.format("Artist: %s",artist));
-		return null;
+		String mediaString = String.format("Music Media [sky=%s, title=%s artist=%s, year=%d]", sku,title,artist,year);
+		return mediaString;
 	}
 	
 	
