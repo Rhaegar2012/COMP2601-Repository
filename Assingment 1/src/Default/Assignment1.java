@@ -1,3 +1,8 @@
+/**
+ * Main Driver Class to visualize the music library
+ * Author: Jose Tellez
+ * Version:1.0
+ * */
 package Default;
 import java.io.File;
 import java.io.FileReader;
@@ -24,11 +29,20 @@ public class Assignment1 {
 		MenuDisplay.displayMenu();
 	}
 	
+	/*
+	 * Nested class to manage data load operations
+	 * */
 	private static class FileLoader{
 		
 		static FileReader reader = null;
 		static Scanner    scanner = null;
-	
+		
+		/*
+		 * Reads music data from a text file and creates a music media object
+		 * @param: fileName fileName , name of the file to loaded
+		 * @throws: IOException , if file fails to load
+		 * */
+		
 		public static void loadData(final String fileName) {
 			File musicFile= new File(fileName);
 			if(!musicFile.exists()) {
@@ -56,6 +70,12 @@ public class Assignment1 {
 			
 		}
 		
+		
+		/**
+		 * Creates anew music media object 
+		 * @param :musicData array, string collection of parameters to create music object
+		 * @param :fileType, file type to be created (Audio file ,Compact Disk, Vinyl Record) 
+		 * */
 		private static  void CreateMusicMediaObject(final String[] musicDataArray,String fileType) {
 			int arraySize = musicDataArray.length;
 			switch(fileType) {
@@ -94,8 +114,14 @@ public class Assignment1 {
 		}
 	}
 	
+	/**
+	 * Nested class to manage menu display and user interaction
+	 * */
 	private static class MenuDisplay {
 		
+		/**
+		 * Prints menu options
+		 * */
 		private static void printMenuOptions() {
 			
 			System.out.println("Choose one of the following options: ");
@@ -104,7 +130,10 @@ public class Assignment1 {
 			System.out.println("3. Display Vinyl Records");
 			System.out.println("4. Exit");
 		}
-		
+		/**
+		 * Displays menu and reads user input 
+		 * @throws Exception: If user input is not an integer
+		 * */
 		public static  void displayMenu() {
 			
 			boolean isAppRunning = true;
