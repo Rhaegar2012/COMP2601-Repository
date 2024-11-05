@@ -56,6 +56,10 @@ public class CustomerDialog extends JDialog {
 			panel.add(textField,gbc);
 		}
 		
+		JButton okButton = new JButton("OK");
+		okButton.addActionListener(e->panel.setVisible(false));
+		panel.add(okButton);
+		okButton.setBounds(50,100,100,30);
 		
 		
 		return panel;	
