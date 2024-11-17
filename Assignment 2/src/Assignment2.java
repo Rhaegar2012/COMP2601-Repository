@@ -31,6 +31,7 @@ public class Assignment2 {
 		library = new MusicLibrary();
 		FileLoader.loadData("music_data.txt");
 		System.out.println("music Data loaded succesfully");
+		//TODO : Make UI run in a different thread as the main application
 		UserInterface userUI = new UserInterface(library);
 		userUI.displayFrame();;
 		

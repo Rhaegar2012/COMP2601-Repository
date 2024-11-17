@@ -154,7 +154,7 @@ public abstract class MusicMedia {
 	@Override
 	public String toString() 
 	{
-		String mediaString = String.format("%s| %s| %s| %d", sku,artist,title,year);
+		String mediaString = String.format("%s | %s | %s | %d", sku,artist,title,year);
 		return mediaString;
 	}
 	
