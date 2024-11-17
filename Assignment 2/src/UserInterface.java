@@ -159,7 +159,7 @@ public class UserInterface {
 	
 	private void displaySelectedLibraryEntry(String selectedSku) 
 	{
-		
+		System.out.println(selectedSku);
 		MusicMedia selectedFile= controller.readMusicRecord(selectedSku);
 		if(selectedFile == null){
 			throw new NullPointerException("Media File not found");
