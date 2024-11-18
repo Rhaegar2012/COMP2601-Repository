@@ -68,7 +68,7 @@ public class VinylRecord extends PhysicalMedia {
 	
 	public VinylRecord(final String sku, final String musicTitle , final String artist, final int year,final int numberOfTracks, final String sizeInInches, final int weight) {
 		super(sku,musicTitle,artist,year);
-		if(!isValidInteger(numberOfTracks)||!isAnAcceptableVinylSize(sizeInInches)||!isAnAcceptableVinylWeight(sizeInInches,weight)) {
+		if(!isValidInteger(numberOfTracks)) {
 			throw new IllegalArgumentException();
 		}
 		this.sizeInInches	=sizeInInches;

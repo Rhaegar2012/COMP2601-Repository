@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Function;
 import java.awt.BorderLayout;
+import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.GridBagConstraints;
@@ -20,6 +21,8 @@ public class UserInterface {
 	private MusicController controller;
 	private JFrame 			appFrame;
 	private final Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+	private ArrayList<JTextField> textFields;
+	
 	//Constants
 	private final static String ABOUT_MESSAGE ="Assignment 2\n"+"Jose Tellez\n"+"A01415384";
 	private final static int 	  FRAME_RESIZE_RATIO 	=2;
@@ -91,7 +94,8 @@ public class UserInterface {
 	private void barMenuSetUp() {
 		JMenuBar menuBar = new JMenuBar();
 		JMenu fileMenu = new JMenu("File");
-		
+		JMenuItem saveData = new JMenuItem("Save Data");
+		JMenuItem exit = new JMenuItem("Exit");
 		
 		JMenu sortingMenu = new JMenu("Sort");
 		JMenuItem sortByType = new JMenuItem("By Type");
@@ -99,17 +103,27 @@ public class UserInterface {
 		JMenuItem sortByTitle = new JMenuItem("By Title");
 		JMenuItem sortByYear = new JMenuItem("By Year");
 		
+		JMenu 	  helpMenu = new JMenu("Help");
+		JMenuItem about = new JMenuItem("About");
+		
+		
+		saveData.addActionListener(e->controller.updateMusicLibrary());
+		exit.addActionListener(e->appFrame.dispose());
+		fileMenu.add(saveData);
+		fileMenu.add(exit);
+		
+		
 		sortByType.addActionListener(e->displaySortedLibrary("Type"));
 		sortByArtist.addActionListener(e->displaySortedLibrary("Artist"));
 		sortByTitle.addActionListener(e->displaySortedLibrary("Title"));
 		sortByYear.addActionListener(e->displaySortedLibrary("Year"));
-		
 		sortingMenu.add(sortByType);
 		sortingMenu.add(sortByArtist);
 		sortingMenu.add(sortByTitle);
 		sortingMenu.add(sortByYear);
 	
-		JMenu helpMenu = new JMenu("Help");
+		about.addActionListener(e->{JOptionPane.showMessageDialog(null,ABOUT_MESSAGE);});
+		helpMenu.add(about);
 		
 		menuBar.add(fileMenu);
 		menuBar.add(sortingMenu);
@@ -159,13 +173,19 @@ public class UserInterface {
 	
 	private void displaySelectedLibraryEntry(String selectedSku) 
 	{
-		System.out.println(selectedSku);
 		MusicMedia selectedFile= controller.readMusicRecord(selectedSku);
 		if(selectedFile == null){
 			throw new NullPointerException("Media File not found");
 		}
-		System.out.println(selectedFile.getSku());
 		JPanel dataPanel = setUpInputPanel(selectedFile);
+		for(Component component:appFrame.getContentPane().getComponents()) {
+			if(component instanceof JPanel) {
+				appFrame.remove(component);
+				appFrame.revalidate();
+				appFrame.repaint();
+				
+			}
+		}
 		appFrame.add(dataPanel);
 		appFrame.setVisible(true);
 		
@@ -176,6 +196,7 @@ public class UserInterface {
 		JPanel 			   panel 		   = new JPanel (new GridBagLayout());
 		GridBagConstraints gridConstraints = new GridBagConstraints();
 		gridConstraints.insets = new Insets(TOP_PADDING,BOTTOM_PADDING,LEFT_PADDING,RIGHT_PADDING);
+		textFields = new ArrayList<JTextField>();
 		if(mediaEntry instanceof AudioFile) 
 		{
 			for(int i=0;i<AUDIO_FILE_LABELS.length;i++) 
@@ -193,6 +214,7 @@ public class UserInterface {
 				Object result = getter.apply(mediaEntry);
 				textField.setText(result.toString());
 				panel.add(textField,gridConstraints);
+				textFields.add(textField);
 				i++;
 				
 			}
@@ -214,6 +236,7 @@ public class UserInterface {
 				Object result = getter.apply(mediaEntry);
 				textField.setText(result.toString());
 				panel.add(textField,gridConstraints);
+				textFields.add(textField);
 				i++;
 				
 			}
@@ -235,21 +258,20 @@ public class UserInterface {
 				Object result = getter.apply(mediaEntry);
 				textField.setText(result.toString());
 				panel.add(textField,gridConstraints);
+				textFields.add(textField);
 				i++;
 				
 			}
 		}
 		JButton clearButton = new JButton("CLEAR");
 		JButton saveButton = new JButton("SAVE");
-		JButton addNewButton = new JButton("ADD NEW");
 		JButton deleteButton = new JButton("DELETE");
 		JButton cancelButton = new JButton("CANCEL");
 		
-		clearButton.addActionListener	(e->System.out.println("TODO clear all entries"));
-	    saveButton.addActionListener	(e->controller.updateMusicFile());
-	    addNewButton.addActionListener	(e->controller.createMusicRecord());
-	    deleteButton.addActionListener  (e->controller.deleteMusicRecord());
-	    cancelButton.addActionListener	(e->System.out.println("TODO cancel operations"));
+		clearButton.addActionListener	(e->clearEntries(panel));
+	    saveButton.addActionListener	(e->getPanelData(panel));
+	    deleteButton.addActionListener  (e->controller.deleteMusicRecord(mediaEntry.getSku()));
+	    cancelButton.addActionListener	(e->clearPanel(panel));
 	    
 	    gridConstraints.gridx=0;
 	    gridConstraints.gridy=10;
@@ -257,23 +279,52 @@ public class UserInterface {
 	    
 	    gridConstraints.gridx=2;
 	    gridConstraints.gridy=10;
-	    panel.add(addNewButton,gridConstraints);
-	    
-	    gridConstraints.gridx=3;
-	    gridConstraints.gridy=10;
 	    panel.add(saveButton,gridConstraints);
 	    
-	    gridConstraints.gridx=4;
+	    gridConstraints.gridx=3;
 	    gridConstraints.gridy=10;
 	    panel.add(deleteButton,gridConstraints);
 	    
 	    
-	    gridConstraints.gridx=5;
+	    gridConstraints.gridx=4;
 	    gridConstraints.gridy=10;
 	    panel.add(cancelButton,gridConstraints);
 		
 		
 		return panel;
 	}
+	
+	private void getPanelData(JPanel panel) {
+		ArrayList<JTextField> panelData= new ArrayList<JTextField>();
+		for(Component component:panel.getComponents()) {
+			if(component instanceof JTextField) {
+				JTextField textField=(JTextField) component;
+				panelData.add(textField);
+			}
+		}
+		controller.updateMusicRecord(panelData);
+	}
+	
+	private void clearEntries(JPanel panel) {
+		if(panel == null) {
+			throw new IllegalArgumentException("Null panel");
+		}
+		for(Component component : panel.getComponents()) {
+			if(component instanceof JTextField) {
+				((JTextField) component).setText("");
+			}
+		}
+	}
+	
+	private void clearPanel(JPanel panel) {
+		if(panel == null) {
+			throw new IllegalArgumentException("Null Panel");
+		}
+		panel.removeAll();
+		panel.revalidate();
+		panel.repaint();
+	}
+	
+	
 
 }

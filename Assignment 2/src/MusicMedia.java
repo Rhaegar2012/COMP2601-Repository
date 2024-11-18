@@ -95,7 +95,7 @@ public abstract class MusicMedia {
 	 * @throws IllegalArgumentException if musicTitle fails the string check
 	 * */
 	public void setMusicTitle(String musicTitle) {
-		if(isValidString(musicTitle)) {
+		if(!isValidString(musicTitle)) {
 			throw new IllegalArgumentException();
 		}
 		this.title = musicTitle;
@@ -115,7 +115,7 @@ public abstract class MusicMedia {
 	 * @throws IllegalArgumentException if artist fails string check
 	 * */
 	public void setArtist(String artist) {
-		if(isValidString(artist)) {
+		if(!isValidString(artist)) {
 			throw new IllegalArgumentException();
 		}
 		this.artist = artist;

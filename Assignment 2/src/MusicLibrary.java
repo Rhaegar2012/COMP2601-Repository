@@ -9,10 +9,14 @@ import java.util.Map;
 import java.util.stream.Collectors;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.io.BufferedWriter;
+import java.io.FileWriter;
+import java.io.IOException;
 
 public class MusicLibrary {
 	
 	private HashMap<String,MusicMedia> library;
+	private static final String SOURCE_FILE_PATH="music_data.txt";
 	
 	/**
 	 * Default Constructor
@@ -31,6 +35,10 @@ public class MusicLibrary {
 		library.put(selection.getSku(), selection);
 	}
 	
+	public void removeMusic(final String removeSKU) {
+		library.remove(removeSKU);
+	}
+	
 	public int getLibrarySize() {
 		return library.size();
 	}
@@ -38,6 +46,20 @@ public class MusicLibrary {
 	public MusicMedia getMusicMediaFile(final String fileSKU) {
 		MusicMedia mediaFile = library.get(fileSKU);
 		return mediaFile;
+	}
+	
+	public void setMusicMediaFile(final String fileSKU,final MusicMedia updatedFile) {
+		library.put(fileSKU,updatedFile);
+	}
+	
+	public void writeLibraryToFile() {
+		try(BufferedWriter writer= new BufferedWriter(new FileWriter(SOURCE_FILE_PATH))){
+			for(Map.Entry<String, MusicMedia>entry:library.entrySet()) {
+				writer.write(entry.getValue().toString());
+				writer.newLine();
+			}}catch(IOException e) {
+				e.printStackTrace();
+			}
 	}
 	
 	/**

@@ -90,32 +90,32 @@ public class Assignment2 {
 			switch(fileType) {
 				case AUDIO_FILE_PREFFIX:
 	
-					String    afSku 	 					= musicDataArray[SKU_INDEX];
-					String    afTitle 						= musicDataArray[TITLE_INDEX];
-					String    afArtist 						= musicDataArray[ARTIST_INDEX];
-					int       afYear						= Integer.parseInt(musicDataArray[YEAR_INDEX]);
-					String    afFileName					= musicDataArray[FILE_NAME_INDEX];
-					int 	  afFileResolution				= Integer.parseInt(musicDataArray[FILE_RESOLUTION_INDEX]);
+					String    afSku 	 					= musicDataArray[SKU_INDEX].trim();
+					String    afTitle 						= musicDataArray[TITLE_INDEX].trim();
+					String    afArtist 						= musicDataArray[ARTIST_INDEX].trim();
+					int       afYear						= Integer.parseInt(musicDataArray[YEAR_INDEX].trim());
+					String    afFileName					= musicDataArray[FILE_NAME_INDEX].trim();
+					int 	  afFileResolution				= Integer.parseInt(musicDataArray[FILE_RESOLUTION_INDEX].trim());
 					AudioFile audioFile = new AudioFile(afSku,afTitle,afArtist,afYear,afFileName,afFileResolution);
 					library.addMusic(audioFile);
 				break;
 				case CD_PREFFIX:
-					String    cdSku 	 					= musicDataArray[SKU_INDEX];
-					String    cdTitle 						= musicDataArray[TITLE_INDEX];
-					String    cdArtist 						= musicDataArray[ARTIST_INDEX];
-					int       cdYear						= Integer.parseInt(musicDataArray[YEAR_INDEX]);
-					int 	  cdNumberOfTracks 				= Integer.parseInt(musicDataArray[NUMBER_TRACKS_INDEX]);
+					String    cdSku 	 					= musicDataArray[SKU_INDEX].trim();
+					String    cdTitle 						= musicDataArray[TITLE_INDEX].trim();
+					String    cdArtist 						= musicDataArray[ARTIST_INDEX].trim();
+					int       cdYear						= Integer.parseInt(musicDataArray[YEAR_INDEX].trim());
+					int 	  cdNumberOfTracks 				= Integer.parseInt(musicDataArray[NUMBER_TRACKS_INDEX].trim());
 					CompactDisk compactDisk = new CompactDisk(cdSku,cdTitle,cdArtist,cdYear,cdNumberOfTracks);
 					library.addMusic(compactDisk);
 				break;
 				case VINYL_RECORD_PREFFIX:
-					String    vrSku 	 					= musicDataArray[SKU_INDEX];
-					String    vrTitle 						= musicDataArray[TITLE_INDEX];
-					String    vrArtist 						= musicDataArray[ARTIST_INDEX];
-					int       vrYear						= Integer.parseInt(musicDataArray[YEAR_INDEX]);
-					int 	  vrNumberOfTracks 				= Integer.parseInt(musicDataArray[NUMBER_TRACKS_INDEX]);
-					String 	  vrSizeInInches 				= musicDataArray[SIZE_IN_INCHES_INDEX];
-					int       vrWeightInGrams 				= Integer.parseInt(musicDataArray[WEIGHT_IN_GRAMS_INDEX]);
+					String    vrSku 	 					= musicDataArray[SKU_INDEX].trim();
+					String    vrTitle 						= musicDataArray[TITLE_INDEX].trim();
+					String    vrArtist 						= musicDataArray[ARTIST_INDEX].trim();
+					int       vrYear						= Integer.parseInt(musicDataArray[YEAR_INDEX].trim());
+					int 	  vrNumberOfTracks 				= Integer.parseInt(musicDataArray[NUMBER_TRACKS_INDEX].trim());
+					String 	  vrSizeInInches 				= musicDataArray[SIZE_IN_INCHES_INDEX].trim();
+					int       vrWeightInGrams 				= Integer.parseInt(musicDataArray[WEIGHT_IN_GRAMS_INDEX].trim());
 					VinylRecord vinylRecord = new VinylRecord(vrSku,vrTitle,vrArtist,vrYear,vrNumberOfTracks,vrSizeInInches,vrWeightInGrams);
 					library.addMusic(vinylRecord);
 				break;
