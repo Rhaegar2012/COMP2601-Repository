@@ -3,6 +3,7 @@
  * */
 import javax.swing.*;
 import java.awt.Toolkit;
+import java.awt.event.KeyEvent;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Function;
@@ -24,7 +25,9 @@ public class UserInterface {
 	private ArrayList<JTextField> textFields;
 	
 	//Constants
-	private final static String ABOUT_MESSAGE ="Assignment 2\n"+"Jose Tellez\n"+"A01415384";
+	private final static String ABOUT_MESSAGE 			="Assignment 2\n"+"Jose Tellez\n"+"A01415384";
+	private final static String DELETE_MESSAGE 			= "Are you sure you want to delete this record?";
+	private final static String SAVE_CHANGES_MESSAGE	="Are you sure you want to save changes to file?";
 	private final static int 	  FRAME_RESIZE_RATIO 	=2;
 	private final static int 	  FRAME_DIALOG_WIDTH	=400;
 	private final static int 	  FRAME_DIALOG_HEIGHT	=400;
@@ -35,11 +38,11 @@ public class UserInterface {
 	private final List<Callback<MusicMedia,?>> COMPACT_DISK_CALLBACKS;
 	private final List<Callback<MusicMedia,?>> VINYL_RECORD_CALLBACKS;
 	
-	private static final int TOP_PADDING =5;
-	private static final int BOTTOM_PADDING=5;
-	private static final int LEFT_PADDING=5;
-	private static final int RIGHT_PADDING=5;
-	private static final int TEXT_FIELD_WIDTH=20;
+	private static final int TOP_PADDING 				=5;
+	private static final int BOTTOM_PADDING				=5;
+	private static final int LEFT_PADDING				=5;
+	private static final int RIGHT_PADDING				=5;
+	private static final int TEXT_FIELD_WIDTH			=20;
 	
 	{
 		AUDIO_FILE_CALLBACKS = new ArrayList<>();
@@ -107,8 +110,10 @@ public class UserInterface {
 		JMenuItem about = new JMenuItem("About");
 		
 		
-		saveData.addActionListener(e->controller.updateMusicLibrary());
+		saveData.addActionListener(e->displaySaveDialog());
+		saveData.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_S,KeyEvent.CTRL_DOWN_MASK));
 		exit.addActionListener(e->appFrame.dispose());
+		exit.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_X,KeyEvent.CTRL_DOWN_MASK));
 		fileMenu.add(saveData);
 		fileMenu.add(exit);
 		
@@ -270,7 +275,7 @@ public class UserInterface {
 		
 		clearButton.addActionListener	(e->clearEntries(panel));
 	    saveButton.addActionListener	(e->getPanelData(panel));
-	    deleteButton.addActionListener  (e->controller.deleteMusicRecord(mediaEntry.getSku()));
+	    deleteButton.addActionListener  (e->deleteRecordDialog(mediaEntry.getSku()));
 	    cancelButton.addActionListener	(e->clearPanel(panel));
 	    
 	    gridConstraints.gridx=0;
@@ -323,6 +328,46 @@ public class UserInterface {
 		panel.removeAll();
 		panel.revalidate();
 		panel.repaint();
+	}
+	
+	
+	private void displaySaveDialog() {
+		JDialog  dialogPanel    = new JDialog ();
+		dialogPanel.setSize(FRAME_DIALOG_WIDTH,FRAME_DIALOG_HEIGHT/2);
+		JLabel messageLabel = new JLabel(SAVE_CHANGES_MESSAGE);
+		dialogPanel.add(messageLabel,BorderLayout.CENTER);
+		JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT));
+		JButton okButton = new JButton("OK");
+		okButton.addActionListener(e->{controller.updateMusicLibrary();
+									   dialogPanel.dispose();});
+		
+		JButton cancelButton = new JButton("Cancel");
+		cancelButton.addActionListener(e->dialogPanel.dispose());
+		buttonPanel.add(okButton);
+		buttonPanel.add(cancelButton);
+		dialogPanel.add(buttonPanel,BorderLayout.SOUTH);
+		dialogPanel.setVisible(true);
+		
+	}
+	
+	
+	private void deleteRecordDialog(String mediaSKU) {
+		JDialog dialogPanel  = new JDialog();
+		dialogPanel.setSize(FRAME_DIALOG_WIDTH,FRAME_DIALOG_HEIGHT/2);
+		JLabel  messageLabel = new JLabel(DELETE_MESSAGE);
+		dialogPanel.add(messageLabel,BorderLayout.CENTER);
+		JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT));
+		
+		JButton okButton = new JButton("OK");
+		okButton.addActionListener(e->{controller.deleteMusicRecord(mediaSKU);
+									   dialogPanel.dispose();});
+		
+		JButton cancelButton = new JButton("Cancel");
+		cancelButton.addActionListener(e->dialogPanel.dispose());
+		buttonPanel.add(okButton);
+		buttonPanel.add(cancelButton);
+		dialogPanel.add(buttonPanel,BorderLayout.SOUTH);
+		dialogPanel.setVisible(true);
 	}
 	
 	

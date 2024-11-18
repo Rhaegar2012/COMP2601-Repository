@@ -4,6 +4,7 @@
  * Version:1.0
  * */
 
+import java.awt.EventQueue;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
@@ -31,9 +32,19 @@ public class Assignment2 {
 		library = new MusicLibrary();
 		FileLoader.loadData("music_data.txt");
 		System.out.println("music Data loaded succesfully");
-		//TODO : Make UI run in a different thread as the main application
-		UserInterface userUI = new UserInterface(library);
-		userUI.displayFrame();;
+		//UI Thread
+		EventQueue.invokeLater(new Runnable() {
+			@Override
+			public void run() {
+				try {
+					UserInterface userUI = new UserInterface(library);
+					userUI.displayFrame();;
+				}catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+		});
+		
 		
 		
 	}
