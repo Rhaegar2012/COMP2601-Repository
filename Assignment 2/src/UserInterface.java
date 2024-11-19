@@ -13,6 +13,7 @@ import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
+import java.awt.GridLayout;
 import java.awt.Insets;
 
 public class UserInterface {
@@ -25,15 +26,19 @@ public class UserInterface {
 	private ArrayList<JTextField> textFields;
 	
 	//Constants
-	private final static String ABOUT_MESSAGE 			="Assignment 2\n"+"Jose Tellez\n"+"A01415384";
-	private final static String DELETE_MESSAGE 			= "Are you sure you want to delete this record?";
-	private final static String SAVE_CHANGES_MESSAGE	="Are you sure you want to save changes to file?";
-	private final static int 	  FRAME_RESIZE_RATIO 	=2;
-	private final static int 	  FRAME_DIALOG_WIDTH	=400;
-	private final static int 	  FRAME_DIALOG_HEIGHT	=400;
-	private final static String[] AUDIO_FILE_LABELS		= {"SKU","Title","Artist","Year","File Name","File Resolution"};
-	private final static String[] COMPACT_DISK_LABELS   = {"SKU","Title","Artist","Year","Number of Tracks"};
-	private final static String[] VINYL_RECORD_LABELS   = {"SKU","Title","Artist","Year","Number of Tracks","Size in Inches","Weight in Grams"};
+	private final static String ABOUT_MESSAGE 				="Assignment 2\n"+"Jose Tellez\n"+"A01415384";
+	private final static String DELETE_MESSAGE 				= "Are you sure you want to delete this record?";
+	private final static String SAVE_CHANGES_MESSAGE		="Are you sure you want to save changes to file?";
+	private final static int 	  FRAME_RESIZE_RATIO 		=2;
+	private final static int 	  FRAME_DIALOG_WIDTH		=400;
+	private final static int 	  FRAME_DIALOG_HEIGHT		=400;
+	private final static int 	  ENTRY_DIALOG_WIDTH        =600;
+	private final static int 	  DIALOG_NUMBER_OF_COLUMNS	=2;
+	private final static int 	  DIALOG_VERTICAL_GAP		=5;
+	private final static int	  DIALOG_HORIZONTAL_GAP		=5;
+	private final static String[] AUDIO_FILE_LABELS			= {"SKU","Title","Artist","Year","File Name","File Resolution"};
+	private final static String[] COMPACT_DISK_LABELS   	= {"SKU","Title","Artist","Year","Number of Tracks"};
+	private final static String[] VINYL_RECORD_LABELS   	= {"SKU","Title","Artist","Year","Number of Tracks","Size in Inches","Weight in Grams"};
 	private final List<Callback<MusicMedia,?>> AUDIO_FILE_CALLBACKS;
 	private final List<Callback<MusicMedia,?>> COMPACT_DISK_CALLBACKS;
 	private final List<Callback<MusicMedia,?>> VINYL_RECORD_CALLBACKS;
@@ -43,6 +48,7 @@ public class UserInterface {
 	private static final int LEFT_PADDING				=5;
 	private static final int RIGHT_PADDING				=5;
 	private static final int TEXT_FIELD_WIDTH			=20;
+	private static final Dimension DIALOG_DIMENSION = new Dimension(400,400);
 	
 	{
 		AUDIO_FILE_CALLBACKS = new ArrayList<>();
@@ -168,7 +174,8 @@ public class UserInterface {
 		JButton okButton = new JButton("OK");
 		buttonPanel.add(okButton);
 		okButton.addActionListener(e->dialog.dispose());
-		dialogList.addListSelectionListener(e->displaySelectedLibraryEntry(dialogList.getSelectedValue().split(" | ")[0].trim()));
+		dialogList.addListSelectionListener(e->{if(!e.getValueIsAdjusting()) {
+			displaySelectedLibraryEntry(dialogList.getSelectedValue().split("\\|")[0].trim());}});
 	
 		dialog.add(scrollPane,BorderLayout.CENTER);
 		dialog.add(buttonPanel,BorderLayout.SOUTH);
@@ -182,7 +189,7 @@ public class UserInterface {
 		if(selectedFile == null){
 			throw new NullPointerException("Media File not found");
 		}
-		JPanel dataPanel = setUpInputPanel(selectedFile);
+		JDialog dataPanel = setUpInputPanel(selectedFile);
 		for(Component component:appFrame.getContentPane().getComponents()) {
 			if(component instanceof JPanel) {
 				appFrame.remove(component);
@@ -191,34 +198,43 @@ public class UserInterface {
 				
 			}
 		}
-		appFrame.add(dataPanel);
-		appFrame.setVisible(true);
+		dataPanel.setVisible(true);
 		
 	}
 	
-	private JPanel setUpInputPanel(MusicMedia mediaEntry) 
+	private JDialog setUpInputPanel(MusicMedia mediaEntry) 
 	{
-		JPanel 			   panel 		   = new JPanel (new GridBagLayout());
+		JDialog dialog = new JDialog ();
+		dialog.setSize(ENTRY_DIALOG_WIDTH,FRAME_DIALOG_HEIGHT);
+		dialog.setLayout(new GridLayout(0,DIALOG_NUMBER_OF_COLUMNS,DIALOG_VERTICAL_GAP,DIALOG_HORIZONTAL_GAP));
+		
+		JPanel entriesPanel = new JPanel(new GridBagLayout());
+		JPanel buttonPanel  = new JPanel(new GridBagLayout());
+		entriesPanel.setSize(DIALOG_DIMENSION);
+		
 		GridBagConstraints gridConstraints = new GridBagConstraints();
 		gridConstraints.insets = new Insets(TOP_PADDING,BOTTOM_PADDING,LEFT_PADDING,RIGHT_PADDING);
+		gridConstraints.fill = GridBagConstraints.HORIZONTAL;
 		textFields = new ArrayList<JTextField>();
 		if(mediaEntry instanceof AudioFile) 
 		{
+			dialog.setTitle("Showing Audio File");
 			for(int i=0;i<AUDIO_FILE_LABELS.length;i++) 
 			{
 				gridConstraints.gridx=0;
 				gridConstraints.gridy=i;
-				panel.add(new JLabel(AUDIO_FILE_LABELS[i]),gridConstraints);
+				entriesPanel.add(new JLabel(AUDIO_FILE_LABELS[i]),gridConstraints);
 			}
 			int i=0;
 			for(Callback<MusicMedia,?> getter:AUDIO_FILE_CALLBACKS) 
 			{
 				gridConstraints.gridx=1;
+				gridConstraints.weightx=3.0;
 				gridConstraints.gridy=i;
 				JTextField textField = new JTextField(TEXT_FIELD_WIDTH);
 				Object result = getter.apply(mediaEntry);
 				textField.setText(result.toString());
-				panel.add(textField,gridConstraints);
+				entriesPanel.add(textField,gridConstraints);
 				textFields.add(textField);
 				i++;
 				
@@ -230,7 +246,7 @@ public class UserInterface {
 			{
 				gridConstraints.gridx=0;
 				gridConstraints.gridy=i;
-				panel.add(new JLabel(COMPACT_DISK_LABELS[i]),gridConstraints);
+				entriesPanel.add(new JLabel(COMPACT_DISK_LABELS[i]),gridConstraints);
 			}
 			int i=0;
 			for(Callback<MusicMedia,?> getter:COMPACT_DISK_CALLBACKS) 
@@ -240,7 +256,7 @@ public class UserInterface {
 				JTextField textField = new JTextField(TEXT_FIELD_WIDTH);
 				Object result = getter.apply(mediaEntry);
 				textField.setText(result.toString());
-				panel.add(textField,gridConstraints);
+				entriesPanel.add(textField,gridConstraints);
 				textFields.add(textField);
 				i++;
 				
@@ -252,7 +268,7 @@ public class UserInterface {
 			{
 				gridConstraints.gridx=0;
 				gridConstraints.gridy=i;
-				panel.add(new JLabel(VINYL_RECORD_LABELS[i]),gridConstraints);
+				entriesPanel.add(new JLabel(VINYL_RECORD_LABELS[i]),gridConstraints);
 			}
 			int i=0;
 			for(Callback<MusicMedia,?> getter:VINYL_RECORD_CALLBACKS) 
@@ -262,7 +278,7 @@ public class UserInterface {
 				JTextField textField = new JTextField(TEXT_FIELD_WIDTH);
 				Object result = getter.apply(mediaEntry);
 				textField.setText(result.toString());
-				panel.add(textField,gridConstraints);
+				entriesPanel.add(textField,gridConstraints);
 				textFields.add(textField);
 				i++;
 				
@@ -273,30 +289,32 @@ public class UserInterface {
 		JButton deleteButton = new JButton("DELETE");
 		JButton cancelButton = new JButton("CANCEL");
 		
-		clearButton.addActionListener	(e->clearEntries(panel));
-	    saveButton.addActionListener	(e->getPanelData(panel));
+		clearButton.addActionListener	(e->clearEntries(entriesPanel));
+	    saveButton.addActionListener	(e->getPanelData(entriesPanel));
 	    deleteButton.addActionListener  (e->deleteRecordDialog(mediaEntry.getSku()));
-	    cancelButton.addActionListener	(e->clearPanel(panel));
+	    cancelButton.addActionListener	(e->clearPanel(entriesPanel));
 	    
 	    gridConstraints.gridx=0;
-	    gridConstraints.gridy=10;
-	    panel.add(clearButton,gridConstraints);
+	    gridConstraints.gridy=1;
+	    buttonPanel.add(clearButton,gridConstraints);
 	    
 	    gridConstraints.gridx=2;
-	    gridConstraints.gridy=10;
-	    panel.add(saveButton,gridConstraints);
+	    gridConstraints.gridy=1;
+	    buttonPanel.add(saveButton,gridConstraints);
 	    
 	    gridConstraints.gridx=3;
-	    gridConstraints.gridy=10;
-	    panel.add(deleteButton,gridConstraints);
+	    gridConstraints.gridy=1;
+	    buttonPanel.add(deleteButton,gridConstraints);
 	    
 	    
 	    gridConstraints.gridx=4;
-	    gridConstraints.gridy=10;
-	    panel.add(cancelButton,gridConstraints);
-		
-		
-		return panel;
+	    gridConstraints.gridy=1;
+	    buttonPanel.add(cancelButton,gridConstraints);
+	    
+	    dialog.add(entriesPanel,BorderLayout.CENTER);
+	    dialog.add(buttonPanel,BorderLayout.SOUTH);
+
+		return dialog;
 	}
 	
 	private void getPanelData(JPanel panel) {

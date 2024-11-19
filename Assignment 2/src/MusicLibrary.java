@@ -17,6 +17,7 @@ public class MusicLibrary {
 	
 	private HashMap<String,MusicMedia> library;
 	private static final String SOURCE_FILE_PATH="music_data.txt";
+	public  static MusicLibrary musicLibrary = new MusicLibrary();
 	
 	/**
 	 * Default Constructor

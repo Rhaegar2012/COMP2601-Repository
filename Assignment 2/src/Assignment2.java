@@ -29,7 +29,7 @@ public class Assignment2 {
 	
 	public static void main (String[] args) {
 		
-		library = new MusicLibrary();
+		library = MusicLibrary.musicLibrary;
 		FileLoader.loadData("music_data.txt");
 		System.out.println("music Data loaded succesfully");
 		//UI Thread
