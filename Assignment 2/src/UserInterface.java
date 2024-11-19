@@ -33,7 +33,9 @@ public class UserInterface {
 	private final static int 	  FRAME_DIALOG_WIDTH		=400;
 	private final static int 	  FRAME_DIALOG_HEIGHT		=400;
 	private final static int 	  ENTRY_DIALOG_WIDTH        =600;
+	private final static int 	  ENTRY_DIALOG_HEIGHT		=600;
 	private final static int 	  DIALOG_NUMBER_OF_COLUMNS	=2;
+	private final static int 	  DIALOG_NUMBER_OF_ROWS	    =2;
 	private final static int 	  DIALOG_VERTICAL_GAP		=5;
 	private final static int	  DIALOG_HORIZONTAL_GAP		=5;
 	private final static String[] AUDIO_FILE_LABELS			= {"SKU","Title","Artist","Year","File Name","File Resolution"};
@@ -48,7 +50,7 @@ public class UserInterface {
 	private static final int LEFT_PADDING				=5;
 	private static final int RIGHT_PADDING				=5;
 	private static final int TEXT_FIELD_WIDTH			=20;
-	private static final Dimension DIALOG_DIMENSION = new Dimension(400,400);
+	
 	
 	{
 		AUDIO_FILE_CALLBACKS = new ArrayList<>();
@@ -205,12 +207,12 @@ public class UserInterface {
 	private JDialog setUpInputPanel(MusicMedia mediaEntry) 
 	{
 		JDialog dialog = new JDialog ();
-		dialog.setSize(ENTRY_DIALOG_WIDTH,FRAME_DIALOG_HEIGHT);
-		dialog.setLayout(new GridLayout(0,DIALOG_NUMBER_OF_COLUMNS,DIALOG_VERTICAL_GAP,DIALOG_HORIZONTAL_GAP));
+		dialog.setSize(ENTRY_DIALOG_WIDTH,ENTRY_DIALOG_HEIGHT);
+		dialog.setLayout(new GridLayout(DIALOG_NUMBER_OF_ROWS,DIALOG_NUMBER_OF_COLUMNS,DIALOG_VERTICAL_GAP,DIALOG_HORIZONTAL_GAP));
 		
 		JPanel entriesPanel = new JPanel(new GridBagLayout());
 		JPanel buttonPanel  = new JPanel(new GridBagLayout());
-		entriesPanel.setSize(DIALOG_DIMENSION);
+		
 		
 		GridBagConstraints gridConstraints = new GridBagConstraints();
 		gridConstraints.insets = new Insets(TOP_PADDING,BOTTOM_PADDING,LEFT_PADDING,RIGHT_PADDING);
@@ -252,6 +254,7 @@ public class UserInterface {
 			for(Callback<MusicMedia,?> getter:COMPACT_DISK_CALLBACKS) 
 			{
 				gridConstraints.gridx=1;
+				gridConstraints.weightx=3.0;
 				gridConstraints.gridy=i;
 				JTextField textField = new JTextField(TEXT_FIELD_WIDTH);
 				Object result = getter.apply(mediaEntry);
@@ -274,6 +277,7 @@ public class UserInterface {
 			for(Callback<MusicMedia,?> getter:VINYL_RECORD_CALLBACKS) 
 			{
 				gridConstraints.gridx=1;
+				gridConstraints.weightx=3.0;
 				gridConstraints.gridy=i;
 				JTextField textField = new JTextField(TEXT_FIELD_WIDTH);
 				Object result = getter.apply(mediaEntry);
