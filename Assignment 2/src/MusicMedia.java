@@ -14,6 +14,10 @@ public abstract class MusicMedia {
 	//Constants
 	public static final int CURRENT_YEAR =2024;
 	public static final int FIRST_YEAR   =1860;
+	private final static String INVALID_YEAR_MESSAGE ="Year must be an integer number";
+	private final static String INVALID_SKU_MESSAGE = "sku must begin with af- cd- or vr-";
+	private final static String INVALID_STRING_MESSAGE ="Empty or blank string";
+	
 	
 	
 	/**
@@ -25,7 +29,11 @@ public abstract class MusicMedia {
 	}
 	
 	public MusicMedia(final String sku, final String title, final String artist){
-		if(!isValidString(sku)|| !isValidString(title)||!isValidString(artist)) {
+		if(!isValidSku(sku)) 
+		{
+			throw new IllegalArgumentException("Invalid sku");
+		}
+		if(!isValidString(title)||!isValidString(artist)) {
 			throw new IllegalArgumentException("Invalid arguments");
 		}
 		this.sku	=sku;
@@ -43,7 +51,17 @@ public abstract class MusicMedia {
 	 * */
 	
 	public MusicMedia(final String sku, final String musicTitle, final String artist,final int year) {
-		if(!isValidString(musicTitle) || !isValidString(artist)|| !isValidInteger(year)||!isValidString(sku)) 
+		if(!isValidSku(sku)) 
+		{
+			throw new IllegalArgumentException("Invalid sku");
+		}
+		
+		if(!isValidInteger(year)) 
+		{
+			throw new IllegalArgumentException("Invalid year");
+		}
+		
+		if(!isValidString(musicTitle) || !isValidString(artist)) 
 		{
 			throw new IllegalArgumentException("Invalid arguments");
 		}
@@ -60,14 +78,32 @@ public abstract class MusicMedia {
 	public boolean isValidString(final String string) {
 		if(string == null) 
 		{
+			CustomNotifications.invalidEntryNotification(INVALID_STRING_MESSAGE);
 			return false;
 		}
 		if(string.isBlank()) 
 		{
+			CustomNotifications.invalidEntryNotification(INVALID_STRING_MESSAGE);
 			return false;
 		}
 		return true;
 	}
+	
+	public boolean isValidSku(final String sku) {
+		if(!isValidString(sku)) {
+			CustomNotifications.invalidEntryNotification(INVALID_STRING_MESSAGE);
+			return false;
+		}
+		String skuSubstring = sku.substring(0,2).trim();
+		System.out.println(skuSubstring);
+		if(!skuSubstring.equals("af") && !skuSubstring.equals("cd") && !skuSubstring.equals("vr")) {
+			CustomNotifications.invalidEntryNotification(INVALID_SKU_MESSAGE);
+			return false;
+		}
+		return true;
+		
+	}
+	
 	/**
 	 * Validates if a parameter is a valid integer entry, returns false if the integer is null , true otherwise
 	 * @param number: integer to be validated
@@ -76,6 +112,7 @@ public abstract class MusicMedia {
 		
 		if(number==null) 
 		{
+			CustomNotifications.invalidEntryNotification(INVALID_YEAR_MESSAGE);
 			return false;
 		}
 		return true;

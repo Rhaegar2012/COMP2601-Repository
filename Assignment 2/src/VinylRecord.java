@@ -26,6 +26,9 @@ public class VinylRecord extends PhysicalMedia {
 	private  Integer 			 TWELVE_INCH_LOWER_WEIGHT_LIMIT;
 	private  Integer 			 TWELVE_INCH_UPPER_WEIGHT_LIMIT;
 	
+	private final static String  INVALID_SIZE_MESSAGE	="Size must 7,10 or 12";
+	private final static String  INVALID_WEIGHT_MESSAGE = "Weight must be between 40 and 200";
+	
 	//Constants initializer block
 	{
 		 WEIGHT_MINIMUM_GRAMS	 		  		= 40;

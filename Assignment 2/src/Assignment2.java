@@ -25,7 +25,8 @@ public class Assignment2 {
 	private static final int    FILE_RESOLUTION_INDEX 	=5;
 	private static final int 	WEIGHT_IN_GRAMS_INDEX	=5;
 	private static final int 	SIZE_IN_INCHES_INDEX	=6;
-	
+
+   
 	
 	public static void main (String[] args) {
 		
@@ -104,7 +105,7 @@ public class Assignment2 {
 					String    afSku 	 					= musicDataArray[SKU_INDEX].trim();
 					String    afTitle 						= musicDataArray[TITLE_INDEX].trim();
 					String    afArtist 						= musicDataArray[ARTIST_INDEX].trim();
-					int       afYear						= Integer.parseInt(musicDataArray[YEAR_INDEX].trim());
+					int	  	  afYear						= Integer.parseInt(musicDataArray[YEAR_INDEX].trim());
 					String    afFileName					= musicDataArray[FILE_NAME_INDEX].trim();
 					int 	  afFileResolution				= Integer.parseInt(musicDataArray[FILE_RESOLUTION_INDEX].trim());
 					AudioFile audioFile = new AudioFile(afSku,afTitle,afArtist,afYear,afFileName,afFileResolution);

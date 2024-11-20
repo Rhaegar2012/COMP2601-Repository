@@ -66,7 +66,10 @@ public abstract class DigitalMedia extends MusicMedia implements FileProcessor {
      * @param filePath: file path in machine
      * */
     public void delete(final String filePath) {
-    	System.out.println("Deleting the audio file "); 
+    	if(!isValidString(filePath)) {
+    		throw new IllegalArgumentException();
+    	}
+    	System.out.println(String.format("Deleting the audio file %s",filePath)); 
     	
     }
 	

@@ -244,6 +244,7 @@ public class UserInterface {
 		}
 		else if(mediaEntry instanceof CompactDisk) 
 		{
+			dialog.setTitle("Showing Compact Disc");
 			for(int i=0;i<COMPACT_DISK_LABELS.length;i++) 
 			{
 				gridConstraints.gridx=0;
@@ -267,6 +268,7 @@ public class UserInterface {
 		}
 		else if (mediaEntry instanceof VinylRecord) 
 		{
+			dialog.setTitle("Showing Vinyl Record");
 			for(int i=0;i<VINYL_RECORD_LABELS.length;i++) 
 			{
 				gridConstraints.gridx=0;
@@ -295,7 +297,7 @@ public class UserInterface {
 		
 		clearButton.addActionListener	(e->clearEntries(entriesPanel));
 	    saveButton.addActionListener	(e->getPanelData(entriesPanel));
-	    deleteButton.addActionListener  (e->deleteRecordDialog(mediaEntry.getSku()));
+	    deleteButton.addActionListener  (e->deleteRecordDialog(mediaEntry.getSku(),dialog));
 	    cancelButton.addActionListener	(e->clearPanel(entriesPanel));
 	    
 	    gridConstraints.gridx=0;
@@ -373,7 +375,7 @@ public class UserInterface {
 	}
 	
 	
-	private void deleteRecordDialog(String mediaSKU) {
+	private void deleteRecordDialog(String mediaSKU,JDialog entryDialog) {
 		JDialog dialogPanel  = new JDialog();
 		dialogPanel.setSize(FRAME_DIALOG_WIDTH,FRAME_DIALOG_HEIGHT/2);
 		JLabel  messageLabel = new JLabel(DELETE_MESSAGE);
@@ -382,7 +384,8 @@ public class UserInterface {
 		
 		JButton okButton = new JButton("OK");
 		okButton.addActionListener(e->{controller.deleteMusicRecord(mediaSKU);
-									   dialogPanel.dispose();});
+									   dialogPanel.dispose();
+									   entryDialog.dispose();});
 		
 		JButton cancelButton = new JButton("Cancel");
 		cancelButton.addActionListener(e->dialogPanel.dispose());

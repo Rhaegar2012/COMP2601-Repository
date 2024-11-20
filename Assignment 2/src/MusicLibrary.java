@@ -33,10 +33,16 @@ public class MusicLibrary {
 	 * @param selection: music media file
 	 * */
 	public void addMusic(final MusicMedia selection) {
+		if(selection == null) {
+			throw new NullPointerException();
+		}
 		library.put(selection.getSku(), selection);
 	}
 	
 	public void removeMusic(final String removeSKU) {
+		if(removeSKU == null || removeSKU.isBlank()) {
+			throw new IllegalArgumentException();
+		}
 		library.remove(removeSKU);
 	}
 	
@@ -45,11 +51,20 @@ public class MusicLibrary {
 	}
 	
 	public MusicMedia getMusicMediaFile(final String fileSKU) {
+		if(fileSKU == null || fileSKU.isBlank()) {
+			throw new IllegalArgumentException();
+		}
 		MusicMedia mediaFile = library.get(fileSKU);
 		return mediaFile;
 	}
 	
 	public void setMusicMediaFile(final String fileSKU,final MusicMedia updatedFile) {
+		if(fileSKU == null || fileSKU.isBlank()) {
+			throw new IllegalArgumentException();
+		}
+		if(updatedFile == null) {
+			throw new NullPointerException();
+		}
 		library.put(fileSKU,updatedFile);
 	}
 	
@@ -84,6 +99,9 @@ public class MusicLibrary {
 	 * */
 	private void displayLibrary(final Map<String,MusicMedia> mediaLibrary) 
 	{
+		if(mediaLibrary == null) {
+			throw new NullPointerException();
+		}
 		for(String key: mediaLibrary.keySet()) {
 			MusicMedia media = mediaLibrary.get(key);
 			media.toString();
@@ -108,6 +126,9 @@ public class MusicLibrary {
 	
 	
 	public void displayChoice(final String prefix) {
+		if(prefix == null || prefix.isBlank()) {
+			throw new IllegalArgumentException();
+		}
 		ArrayList<String> choiceOptions = new ArrayList<>(Arrays.asList("af","cd","vr"));
 		if(prefix == null || prefix.isBlank()) {
 			throw new IllegalArgumentException("Empty prefix");

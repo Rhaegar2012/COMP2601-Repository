@@ -16,6 +16,15 @@ public class MusicController {
 	private final List<Callback<MusicMedia,Object>> AUDIO_FILE_CALLBACKS;
 	private final List<Callback<MusicMedia,Object>> COMPACT_DISK_CALLBACKS;
 	private final List<Callback<MusicMedia,Object>> VINYL_RECORD_CALLBACKS;
+	
+	 private static final String INVALID_YEAR_MESSAGE = "Year must be an integer";
+	 private static final String INVALID_RESOLUTION_MESSAGE="Resolution must be an integer";
+	 private static final String INVALID_NUMBER_OF_TRACKS="Number of tracks must be an integer";
+	 private static final String INVALID_WEIGHT_MESSAGE  ="Weight must be an integer";
+	 private static final String INVALID_AF_MESSAGE		 ="Year and file resolution must be integers";
+	 private static final String INVALID_CD_MESSAGE 	 ="Year and number of tracks must be integers";
+	 private static final String INVALID_VR_MESSAGE 	 ="Year, number of tracks and weight must be integers";
+	 
 
 	
 	{
@@ -79,19 +88,34 @@ public class MusicController {
 			switch(fileTypePreffix) {
 				case "af":
 					for(int i=0 ;i< AUDIO_FILE_CALLBACKS.size();i++){
-						AUDIO_FILE_CALLBACKS.get(i).accept(file, textFields.get(i).getText());
+						try {
+							
+							AUDIO_FILE_CALLBACKS.get(i).accept(file, textFields.get(i).getText());
+						}catch(Exception e) {
+							CustomNotifications.invalidEntryNotification(INVALID_AF_MESSAGE);
+						}
 						
 					}
 					
 				break;
 				case "cd":
 					for(int i=0;i< COMPACT_DISK_CALLBACKS.size();i++) {
-						COMPACT_DISK_CALLBACKS.get(i).accept(file,textFields.get(i).getText());
+						try {
+							
+							COMPACT_DISK_CALLBACKS.get(i).accept(file,textFields.get(i).getText());
+						}catch(Exception e) {
+							CustomNotifications.invalidEntryNotification(INVALID_CD_MESSAGE);
+						}
 					}
 				break;
 				case "vr":
 					for(int i=0;i<VINYL_RECORD_CALLBACKS.size();i++) {
-						VINYL_RECORD_CALLBACKS.get(i).accept(file,textFields.get(i).getText());
+						try {
+							
+							VINYL_RECORD_CALLBACKS.get(i).accept(file,textFields.get(i).getText());
+						}catch(Exception e) {
+							CustomNotifications.invalidEntryNotification(INVALID_VR_MESSAGE);
+						}
 					}
 				break;
 			}
@@ -107,15 +131,32 @@ public class MusicController {
 		String newSKU= textValues.get(0).getText();
 		System.out.println(newSKU);
 		String fileTypePreffix = newSKU.substring(0,2);
+		int afYear			=0;
+		int afFileResolution=0;
+		int cdYear          =0;
+		int cdNumberOfTracks=0;
+		int vrYear          =0;
+		int vrNumberOfTracks=0;
+		int vrWeightInGrams =0;
 		switch(fileTypePreffix) 
 		{
 			case "af":
 				String    afSku 	 					= textValues.get(0).getText();
 				String    afTitle 						= textValues.get(1).getText();
 				String    afArtist 						= textValues.get(2).getText();
-				int       afYear						= Integer.parseInt(textValues.get(3).getText());
+				try {
+					
+					      afYear						= Integer.parseInt(textValues.get(3).getText());
+				}catch(Exception e){
+				    CustomNotifications.invalidEntryNotification(INVALID_YEAR_MESSAGE);
+				}
 				String    afFileName					= textValues.get(4).getText();
-				int 	  afFileResolution				= Integer.parseInt(textValues.get(5).getText());
+				try {
+					
+					     afFileResolution				= Integer.parseInt(textValues.get(5).getText());
+				}catch(Exception e) {
+					CustomNotifications.invalidEntryNotification(INVALID_RESOLUTION_MESSAGE);
+				}
 				AudioFile audioFile = new AudioFile(afSku,afTitle,afArtist,afYear,afFileName,afFileResolution);
 				musicLibrary.addMusic(audioFile);
 				break;
@@ -123,8 +164,18 @@ public class MusicController {
 				String    cdSku 	 					= textValues.get(0).getText();
 				String    cdTitle 						= textValues.get(1).getText();
 				String    cdArtist 						= textValues.get(2).getText();
-				int       cdYear						= Integer.parseInt(textValues.get(3).getText());
-				int 	  cdNumberOfTracks 				= Integer.parseInt(textValues.get(4).getText());
+				try {
+					
+				          cdYear						= Integer.parseInt(textValues.get(3).getText());
+				}catch(Exception e) {
+					CustomNotifications.invalidEntryNotification(INVALID_YEAR_MESSAGE);
+				}
+				try {
+					
+						cdNumberOfTracks 				= Integer.parseInt(textValues.get(4).getText());
+				}catch(Exception e) {
+					CustomNotifications.invalidEntryNotification(INVALID_NUMBER_OF_TRACKS);
+				}
 				CompactDisk compactDisk = new CompactDisk(cdSku,cdTitle,cdArtist,cdYear,cdNumberOfTracks);
 				musicLibrary.addMusic(compactDisk);
 				break;
@@ -132,10 +183,25 @@ public class MusicController {
 				String    vrSku 	 					= textValues.get(0).getText();
 				String    vrTitle 						= textValues.get(1).getText();
 				String    vrArtist 						= textValues.get(2).getText();
-				int       vrYear						= Integer.parseInt(textValues.get(3).getText());
-				int 	  vrNumberOfTracks 				= Integer.parseInt(textValues.get(4).getText());
+				try {
+					
+			          	   vrYear						= Integer.parseInt(textValues.get(3).getText());
+				}catch(Exception e) {
+					CustomNotifications.invalidEntryNotification(INVALID_YEAR_MESSAGE);
+				}
+				try {
+					       vrNumberOfTracks 			= Integer.parseInt(textValues.get(4).getText());
+				}catch(Exception e) {
+					CustomNotifications.invalidEntryNotification(INVALID_NUMBER_OF_TRACKS);
+				}
+				
 				String 	  vrSizeInInches 				= textValues.get(5).getText();
-				int       vrWeightInGrams 				= Integer.parseInt(textValues.get(6).getText());
+				try {
+					
+				          vrWeightInGrams 				= Integer.parseInt(textValues.get(6).getText());
+				}catch(Exception e) {
+					CustomNotifications.invalidEntryNotification(INVALID_WEIGHT_MESSAGE);
+				}
 				VinylRecord vinylRecord = new VinylRecord(vrSku,vrTitle,vrArtist,vrYear,vrNumberOfTracks,vrSizeInInches,vrWeightInGrams);
 				musicLibrary.addMusic(vinylRecord);
 				break;
